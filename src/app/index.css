@@ -48,16 +48,16 @@ body {
   border-radius: 16px;
   padding: 40px;
   gap: 20px;
-  visibility: hidden;
+  /* visibility: hidden;
   opacity: 0;
-  transition: 0.5s;
+  transition: 0.5s; */
 }
 
-.popup.active {
+/* .popup.active {
   visibility: visible;
   opacity: 1;
   transition: 0.5s;
-}
+} */
 
 .popup p {
   color: white;

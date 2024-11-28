@@ -1,34 +1,64 @@
+"use client";
+
+import { useState } from "react";
 import { toggle } from "./index.js";
 import { addTask } from "./index.js";
 import { saveEdited } from "./index.js";
-const Lists = () => {
+const Modal = () => {
+  const [title, setTitle] = useState("")
+  const [status, setStatus] = useState("")
+  console.log(status);
+
+  const handleSubmit = () =>{
+    setTodoTasks.push({title : title})
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <section className="todo-container">
-      <a href="#" onClick={toggle()}>
-        <button className="add-task" id="add-task">
-          Add task
-        </button>
-      </a>
+    <div>
       <div id="popup" className="popup">
         <p>Enter task</p>
         <input
           type="text"
           placeholder="Task name..."
           id="myInput"
-          onchange="render()"
+          onChange={e => setTitle(e.target.value)}
         />
         <label for="select">Choose your status :</label>
-        <select name="status" id="select">
+        <select name="status" id="select" onChange={e => setStatus(e.target.value)}>
           <option value="todo">To do</option>
           <option value="inProgress">In progress</option>
           <option value="done">Done</option>
           <option value="blocked">Blocked</option>
         </select>
-        <a href="#" onClick={toggle()}>
-          <button onClick={addTask()}>Submit</button>
+        <a href="#">
+          <button onSubmit={handleSubmit}>Submit</button>
         </a>
       </div>
-      <div id="edit-task-pop-up" className="popup">
+    </div>
+  );
+};
+
+const Lists = () => {
+  const [todoTasks, setTodoTasks] = useState([
+    { title: "Ayga ugaah" },
+    { title: "Shal ugaah  " },
+  ]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <section className="todo-container">
+      <a href="#">
+        <button onClick={openModal} className="add-task" id="add-task">
+          Add task
+        </button>
+      </a>
+    {isOpen && <Modal />}
+      {/* <div id="edit-task-pop-up" className="popup">
         <p>Edit task</p>
         <input type="text" placeholder="New task name..." id="editedInput" />
         <label for="select">Choose your status :</label>
@@ -38,8 +68,8 @@ const Lists = () => {
           <option value="done">Done</option>
           <option value="blocked">Blocked</option>
         </select>
-        <button onClick={saveEdited()}>Submit</button>
-      </div>
+        <button >Submit</button>
+      </div> */}
       <main className="lists-section">
         <div className="to-do" id="todo">
           <div className="lists-title">
@@ -49,7 +79,11 @@ const Lists = () => {
               0
             </span>
           </div>
-          <div className="tasks" id="tasks-todo"></div>
+          <div className="tasks" id="tasks-todo">
+            {todoTasks.map((task) => (
+              <div>{task.title}</div>
+            ))}
+          </div>
         </div>
         <div className="inProgress" id="inProgress">
           <div className="lists-title">

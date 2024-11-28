@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import { Lists } from "./lists.js";
 import "./index.css";
