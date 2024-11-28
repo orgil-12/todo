@@ -1,38 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { toggle } from "./index.js";
-import { addTask } from "./index.js";
-import { saveEdited } from "./index.js";
-const Modal = () => {
-  const [title, setTitle] = useState("")
-  const [status, setStatus] = useState("")
-  console.log(status);
-
-  const handleSubmit = () =>{
-    setTodoTasks.push({title : title})
-    setIsOpen(!isOpen)
-  }
-
+import "./index.css";
+const Modal = (props) => {
   return (
     <div>
       <div id="popup" className="popup">
         <p>Enter task</p>
         <input
+          value={props.title}
           type="text"
           placeholder="Task name..."
           id="myInput"
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => props.setTitle(e.target.value)}
         />
         <label for="select">Choose your status :</label>
-        <select name="status" id="select" onChange={e => setStatus(e.target.value)}>
-          <option value="todo">To do</option>
-          <option value="inProgress">In progress</option>
-          <option value="done">Done</option>
-          <option value="blocked">Blocked</option>
+        <select
+          name="status"
+          id="select"
+          onChange={(e) => {props.setStatus(e.target.value);}} value={props.status}>
+          <option>Select your status</option>
+          <option value={"todo"}>To do</option>
+          <option value={"inProgress"}>In progress</option>
+          <option value={"done"}>Done</option>
+          <option value={"blocked"}>Blocked</option>
         </select>
         <a href="#">
-          <button onSubmit={handleSubmit}>Submit</button>
+          <button onClick={props.handleSubmit}>Submit</button>
         </a>
       </div>
     </div>
@@ -40,12 +34,16 @@ const Modal = () => {
 };
 
 const Lists = () => {
-  const [todoTasks, setTodoTasks] = useState([
-    { title: "Ayga ugaah" },
-    { title: "Shal ugaah  " },
-  ]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [status, setStatus] = useState("");
 
+  const [tasks, setTodoTasks] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  console.log(tasks);
+  const handleSubmit = () => {
+    setTodoTasks([...tasks, { title: title, status: status }]);
+    setIsOpen(false);
+  };
   const openModal = () => {
     setIsOpen(!isOpen);
   };
@@ -57,7 +55,15 @@ const Lists = () => {
           Add task
         </button>
       </a>
-    {isOpen && <Modal />}
+      {isOpen && (
+        <Modal
+          title={title}
+          setTitle={setTitle}
+          status={status}
+          setStatus={setStatus}
+          handleSubmit={handleSubmit}
+        />
+      )}
       {/* <div id="edit-task-pop-up" className="popup">
         <p>Edit task</p>
         <input type="text" placeholder="New task name..." id="editedInput" />
@@ -80,9 +86,15 @@ const Lists = () => {
             </span>
           </div>
           <div className="tasks" id="tasks-todo">
-            {todoTasks.map((task) => (
-              <div>{task.title}</div>
-            ))}
+            {tasks
+              .filter((task) => task.status === "todo")
+              .map((task) => (
+                <div className="task">
+                  <p>{task.title}</p>
+                  <img src="edit.png"></img>
+                  <img src="delete.png" className="delete-button"></img>
+                </div>
+              ))}
           </div>
         </div>
         <div className="inProgress" id="inProgress">
@@ -93,7 +105,15 @@ const Lists = () => {
               0
             </span>
           </div>
-          <div className="tasks" id="tasks-inProgress"></div>
+          <div className="tasks" id="tasks-inProgress">
+            {tasks.filter((task) => task.status === "inProgress").map((task) => (
+                <div className="task">
+                  <p>{task.title}</p>
+                  <img src="edit.png"></img>
+                  <img src="delete.png" className="delete-button"></img>
+                </div>
+              ))}
+          </div>
         </div>
         <div className="done" id="done">
           <div className="lists-title">
@@ -103,7 +123,15 @@ const Lists = () => {
               0
             </span>
           </div>
-          <div className="tasks" id="tasks-done"></div>
+          <div className="tasks" id="tasks-done">
+            {tasks.filter((task) => task.status === "done").map((task) => (
+                <div className="task">
+                  <p>{task.title}</p>
+                  <img src="edit.png"></img>
+                  <img src="delete.png" className="delete-button"></img>
+                </div>
+              ))}
+          </div>
         </div>
         <div className="blocked" id="blocked">
           <div className="lists-title">
@@ -113,7 +141,15 @@ const Lists = () => {
               0
             </span>
           </div>
-          <div className="tasks" id="tasks-blocked"></div>
+          <div className="tasks" id="tasks-blocked">
+            {tasks.filter((task) => task.status === "blocked").map((task) => (
+                <div className="task">
+                  <p>{task.title}</p>
+                  <img src="edit.png"></img>
+                  <img src="delete.png" className="delete-button"></img>
+                </div>
+              ))}
+          </div>
         </div>
       </main>
     </section>
