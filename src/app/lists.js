@@ -47,14 +47,15 @@ const EditModal = (props) => {
         id="editedInput"
         // defaultValue={props.title}
         value={props.title}
-        onChange={(e) => props.setTitle(e.target.value)}
+        onChange={(e) => {props.setTitle(e.target.value);
+          console.log(e.target.value)
+        }}
       />
       <label for="select">Choose your status :</label>
       <select
         name="status"
         id="editedSelect"
         value={props.status}
-        defaultValue={props.status}
         onChange={(e) => props.setStatus(e.target.value)}
       >
         <option value="todo">To do</option>
@@ -62,7 +63,7 @@ const EditModal = (props) => {
         <option value="done">Done</option>
         <option value="blocked">Blocked</option>
       </select>
-      <button onClick={props.handleEditSubmit}>Submit</button>
+      <button onClick={() => {props.handleEditSubmit(props.id)}}>Submit</button>
     </div>
   );
 };
@@ -77,15 +78,18 @@ const Lists = () => {
 
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
+  const [counter, setCounter] = useState(0);
+
   const handleSubmit = () => {
     setTasks([...tasks, { id: id, title: title, status: status }]);
     setId(id + 1);
     setIsOpen(false);
   };
 
-  const handleEditSubmit = () => {
+  function handleEditSubmit(id) {
+    setTasks([...tasks.filter((task) => task.id !== id), {title: title, status: status}]);
     setIsOpenEditModal(false);
-  };
+  }
 
   const openModal = () => {
     setIsOpen(!isOpen);
@@ -117,7 +121,6 @@ const Lists = () => {
             <span className="dot"></span>
             <p className="title">To do</p>
             <span className="counter" id="todoCounter">
-              0
             </span>
           </div>
           <div className="tasks" id="tasks-todo">
@@ -129,9 +132,10 @@ const Lists = () => {
                   <img src="edit.png" onClick={openEditModal}></img>
                   {isOpenEditModal && (
                     <EditModal
-                      title={title}
+                    id={task.id}
+                    title={title}
+                    status={status}
                       setTitle={setTitle}
-                      status={status}
                       setStatus={setStatus}
                       handleEditSubmit={handleEditSubmit}
                     />
@@ -206,7 +210,7 @@ const Lists = () => {
             <span className="dot"></span>
             <p className="title">Blocked</p>
             <span className="counter" id="blockedCounter">
-              0
+              {}
             </span>
           </div>
           <div className="tasks" id="tasks-blocked">
